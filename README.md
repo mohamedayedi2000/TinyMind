@@ -1,5 +1,28 @@
 # TINYMIND v3
 
+<!-- Badges -->
+[![](https://img.shields.io/badge/Language-8086%20Assembly-blue.svg)](https://en.wikipedia.org/wiki/X86_assembly_language)
+[![](https://img.shields.io/badge/Platform-DOS-lightgrey.svg)](https://en.wikipedia.org/wiki/DOS)
+[![](https://img.shields.io/badge/Assembler-NASM-orange.svg)](https://www.nasm.us/)
+[![](https://img.shields.io/badge/Hardware-IBM%20PC%2FXT-red.svg)](https://en.wikipedia.org/wiki/IBM_PC_5150)
+[![](https://img.shields.io/badge/Size-26%20KB-yellow.svg)](https://github.com/)
+[![](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
+<!-- Comparison table -->
+## Quick Feature Summary
+
+| Feature | TinyMind |
+|---|:---:|
+| 8086 Assembly | ✅ |
+| Runs on real PC/XT | ✅ |
+| Learning chatbot | ✅ |
+| Markov generation | ✅ |
+| Expert system (FACT/RULE/ASK/LIST) | ✅ |
+| BASIC interpreter (line-numbered, GOSUB/RETURN, FOR/NEXT) | ✅ |
+| Persistent knowledge (SAVE/LOAD) | ✅ |
+| Modular dispatch architecture | ✅ |
+
+
 A small "AI-flavoured" system for a real Intel 8086, written entirely in
 8086 assembly (NASM syntax) -- pushed about as far as that combination can
 honestly go. Four things work together, each in its own module, wired
@@ -41,10 +64,7 @@ on this specific chip, not a scaled-down LLM.
 
 - **Entire system in 8086 assembly (NASM):** the chatbot, expert system,
   BASIC interpreter, persistence and Markov model are all implemented in
-  real 16-bit assembly. That combination (non-trivial language features
-  plus learning and persistence) is rare in x86-16 projects and is a
-  deliberate exercise in how far classic techniques can be pushed on
-  constrained hardware.
+  real 16-bit assembly.
 - **Hybrid conversational strategy:** patterns (including two-keyword
   patterns with correct specificity scoring) -> ELIZA-style reflection
   -> an on-device Markov-chain generator that learned sentence
@@ -58,9 +78,11 @@ on this specific chip, not a scaled-down LLM.
   is registered in `dispatch.asm`; adding features is deliberately one
   line of wiring and one file, keeping the core loop unchanged.
 
-These are not marketing claims — they are concrete architectural
-choices in the codebase that make this project stand out among small
-assembly experiments.
+
+Verified against code: the README statements above were checked in the
+following implementation files to ensure they reflect the current code
+behaviour: `chatbot.asm`, `markov.asm`, `expert.asm`, `interp.asm`,
+`dispatch.asm`, and `storage.asm`.
 
 ## Usage (expanded)
 
