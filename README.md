@@ -37,6 +37,98 @@ tested; it's also all pre-deep-learning technique (pattern matching,
 forward chaining, Markov chains, BASIC) pushed about as far as it can go
 on this specific chip, not a scaled-down LLM.
 
+## What Makes TINYMIND Unique
+
+- **Entire system in 8086 assembly (NASM):** the chatbot, expert system,
+  BASIC interpreter, persistence and Markov model are all implemented in
+  real 16-bit assembly. That combination (non-trivial language features
+  plus learning and persistence) is rare in x86-16 projects and is a
+  deliberate exercise in how far classic techniques can be pushed on
+  constrained hardware.
+- **Hybrid conversational strategy:** patterns (including two-keyword
+  patterns with correct specificity scoring) -> ELIZA-style reflection
+  -> an on-device Markov-chain generator that learned sentence
+  boundaries. The chain is persisted and learns online from actual
+  conversation, so generated output reflects the conversation history.
+- **Integrated expert system + programmable BASIC:** facts, forward
+  chaining rules, and a line-numbered BASIC with real `GOSUB`/`RETURN`
+  call stack and `FOR`/`NEXT` loop stack live alongside the chatbot and
+  Markov learner in the same small binary and share persistence.
+- **Minimal, modular dispatch:** each capability is a handler file and
+  is registered in `dispatch.asm`; adding features is deliberately one
+  line of wiring and one file, keeping the core loop unchanged.
+
+These are not marketing claims — they are concrete architectural
+choices in the codebase that make this project stand out among small
+assembly experiments.
+
+## Usage (expanded)
+
+Below are practical usage recipes and tips to get the most out of
+TINYMIND.
+
+- Build and run (quick):
+
+```sh
+./build.sh
+# Run inside DOSBox, emu2, or on real 8086 hardware
+dosbox tinymind.com
+```
+
+- Teach conversational patterns (two-keyword example):
+
+```
+TEACH RAINING+COLD Bundle up, it's a rough one out there.
+```
+
+Now any line containing both `RAINING` and `COLD` (anywhere in the
+sentence) will trigger the specific reply, outranking a single-keyword
+match for either word.
+
+- Use the Markov generator and save learned data:
+
+```
+THINK        # generate a sentence from learned Markov chains
+SAVE         # persist patterns, facts, program and the Markov model
+LOAD         # restore everything from disk later
+```
+
+- Expert system examples:
+
+```
+FACT cloudy
+FACT raining
+RULE cloudy raining umbrella  # cloudy AND raining => umbrella
+ASK umbrella                    # returns YES if derivable
+LIST                            # shows current facts (post-chaining)
+```
+
+- BASIC programming tips:
+
+```
+10 FOR I = 5 TO 1 STEP -1
+20 PRINT I
+30 GOSUB 100
+40 NEXT I
+50 END
+100 IF I = 1 THEN PRINT 999
+110 RETURN
+RUN      # executes the stored program
+PLIST    # lists the stored program
+```
+
+- Running the test suite (reproducible):
+
+```sh
+./build.sh
+EMU2=/path/to/emu2 ./tests/run_tests.sh
+```
+
+If you want help with a specific workflow (for example, teaching a
+large corpus, exporting the Markov model, or running under an
+emulator/real hardware) tell me which one and I can provide exact
+commands or an automated script.
+
 ## Build
 
 Requires [NASM](https://www.nasm.us/).
