@@ -79,10 +79,7 @@ on this specific chip, not a scaled-down LLM.
   line of wiring and one file, keeping the core loop unchanged.
 
 
-Verified against code: the README statements above were checked in the
-following implementation files to ensure they reflect the current code
-behaviour: `chatbot.asm`, `markov.asm`, `expert.asm`, `interp.asm`,
-`dispatch.asm`, and `storage.asm`.
+ 
 
 ## Usage (expanded)
 
